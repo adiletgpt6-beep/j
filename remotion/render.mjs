@@ -30,7 +30,7 @@ for (const id of ids) {
     imageFormat: "jpeg",
     jpegQuality: 90,
     crf: 20,
-    x264Preset: "slow",
+    x264Preset: "medium",
     pixelFormat: "yuv420p",
     audioBitrate: "192k",
     onProgress: ({ progress }) => {

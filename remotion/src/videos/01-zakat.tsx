@@ -266,7 +266,7 @@ const Rate: React.FC<SceneProps> = ({ scene, lang }) => {
         })}
       </Canvas>
       <BigLabel text={scene.caption ?? "2,5 %"} delay={rateAt + 14} size={130} y={880} color={colors.brandDeep} />
-      {fortyAt > 0 && <Tag text="1 / 40" delay={fortyAt} x={W / 2} y={1150} bg={colors.terracotta} size={40} />}
+      {fortyAt > 0 && <Tag text="1 / 40" delay={fortyAt} x={W / 2} y={990} bg={colors.terracotta} size={40} />}
       {scene.note && <Note text={scene.note} delay={thousandAt - 4} />}
     </SoftBackground>
   );
