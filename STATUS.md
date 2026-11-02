@@ -9,7 +9,9 @@ _Обновлено: 2026-11-02 (сессия 1)._
   «Lesson-teacher-Muhammad») для всех 18 версий, тайминги слов, субтитры SRT (`subtitles/`).
 - Автопроверка речи распознаванием (Scribe): все реплики ≤ 0,15 WER, кроме перечисленных ниже.
 - Визуальная система и библиотека иллюстраций (Remotion), сцены всех 9 роликов (по 6–8 уникальных сцен в каждом).
-- Рендер MP4 1080×1920, 30 fps, H.264/AAC — см. таблицу в `docs/VIDEO_REGISTRY.md`. Готовые файлы — `videos/`.
+- **Все 18 MP4 отрендерены и проверены** (`tools/qa.py`: H.264 1080×1920, 30 fps, AAC, громкость −14…−16 LUFS, 70–109 с, по 10–14 МБ).
+  Файлы: `videos/zeket-<id>-<ky|ru>.mp4` (хранятся прямо в git, GitHub Releases из этой среды создавать запрещено).
+  Скачать на телефон: открыть файл в GitHub → «Download raw file» (или `git clone`). Таблица — `docs/VIDEO_REGISTRY.md`.
 - Документация: START_HERE, HANDOFF, docs/RENDER, docs/SCENE_AUTHORING, docs/VISUAL_SYSTEM, docs/SOURCES_AND_REVIEW.
 
 ## Что осталось / требует человека
