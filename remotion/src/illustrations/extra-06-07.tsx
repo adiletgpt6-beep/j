@@ -323,7 +323,7 @@ export const KgMap: React.FC<{ x: number; y: number; scale?: number; fill?: stri
   fill = colors.mint,
   stroke = colors.brand,
   dots = true,
-  dotOpacity = () => 1,
+  dotOpacity = (_i: number) => 1,
   activeDot = -1,
   frame = 0,
 }) => (
@@ -372,7 +372,7 @@ export const HandOnHeart: React.FC<{ x: number; y: number; scale?: number; skin?
     <path d="M-62 -120 Q-70 -250 -40 -270 L40 -270 Q70 -250 62 -120 Z" fill={outfit} />
     <path d="M52 -250 L78 -180" stroke={outfit} strokeWidth={28} strokeLinecap="round" />
     <path d="M78 -180 L14 -200" stroke={outfit} strokeWidth={26} strokeLinecap="round" />
-    {glow > 0 && <circle cx={8} cy={-205} r={30 + glow * 26} fill={colors.gold} opacity={0.35 * glow} />}
+    {glow > 0 && <circle cx={8} cy={-205} r={22 + glow * 12} fill={colors.gold} opacity={0.3 * glow} />}
     <circle cx={8} cy={-205} r={17} fill={skin} />
   </g>
 );
@@ -414,19 +414,24 @@ export const Pointer: React.FC<{ x: number; y: number; scale?: number; skin?: st
 
 /** Arched bridge drawn progressively from both ends. progress 0..1 */
 export const Bridge: React.FC<{ x1: number; x2: number; y: number; rise?: number; progress?: number }> = ({ x1, x2, y, rise = 150, progress = 1 }) => {
-  const d = `M${x1} ${y} Q ${(x1 + x2) / 2} ${y - rise * 2} ${x2} ${y}`;
-  const len = 1200;
-  const half = Math.max(0, Math.min(1, progress));
+  const cx = (x1 + x2) / 2;
+  const cy = y - rise * 2;
+  const p = Math.max(0, Math.min(1, progress));
+  const pt = (t: number, dy = 0) => `${(1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * cx + t * t * x2} ${(1 - t) * (1 - t) * y + 2 * (1 - t) * t * cy + t * t * y + dy}`;
+  const N = 40;
+  const half = p / 2;
+  const left = Array.from({ length: N + 1 }).map((_, i) => pt((i / N) * half)).join(" L");
+  const right = Array.from({ length: N + 1 }).map((_, i) => pt(1 - (i / N) * half)).join(" L");
+  const rail = Array.from({ length: N + 1 }).map((_, i) => pt(i / N, -50)).join(" L");
   return (
     <g>
-      <path d={d} stroke={colors.brandDeep} strokeWidth={28} fill="none" strokeLinecap="round" strokeDasharray={`${len * half} ${len}`} />
-      <path d={d} stroke={colors.brand} strokeWidth={28} fill="none" strokeLinecap="round" strokeDasharray={`${len * half} ${len}`} strokeDashoffset={-len * (1 - half)} transform={`translate(${x1 + x2} 0) scale(-1 1)`} />
-      <path d={`M${x1} ${y - 50} Q ${(x1 + x2) / 2} ${y - 50 - rise * 2} ${x2} ${y - 50}`} stroke={colors.gold} strokeWidth={10} fill="none" strokeLinecap="round" opacity={progress >= 1 ? 1 : 0} />
-      {progress >= 1 &&
+      {p > 0 && <path d={`M${left}`} stroke={colors.brand} strokeWidth={28} fill="none" strokeLinecap="round" strokeLinejoin="round" />}
+      {p > 0 && <path d={`M${right}`} stroke={colors.brand} strokeWidth={28} fill="none" strokeLinecap="round" strokeLinejoin="round" />}
+      {p >= 1 && <path d={`M${rail}`} stroke={colors.gold} strokeWidth={10} fill="none" strokeLinecap="round" strokeLinejoin="round" />}
+      {p >= 1 &&
         Array.from({ length: 7 }).map((_, i) => {
           const t = (i + 0.5) / 7;
-          const px = x1 + (x2 - x1) * t;
-          const py = (1 - t) * (1 - t) * y + 2 * (1 - t) * t * (y - rise * 2) + t * t * y;
+          const [px, py] = pt(t).split(" ").map(Number);
           return <line key={i} x1={px} y1={py} x2={px} y2={py - 50} stroke={colors.gold} strokeWidth={8} strokeLinecap="round" />;
         })}
     </g>
@@ -450,7 +455,7 @@ export const AskCard: React.FC<{ x: number; y: number; scale?: number; label: st
         ?
       </SvgText>
     </g>
-    <SvgText x={0} y={122} size={34} weight={800} color={colors.brandDeep}>
+    <SvgText x={0} y={126} size={44} weight={800} color={colors.brandDeep}>
       {label}
     </SvgText>
   </g>

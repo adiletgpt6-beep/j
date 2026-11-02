@@ -146,7 +146,7 @@ export const Dastorkon: React.FC<{ x: number; y: number; scale?: number; items?:
       <rect x={-w} y={-18} width={w * 2} height={40} rx={12} fill="none" stroke={cloth2} strokeWidth={4} strokeDasharray="14 10" opacity={0.8} />
       <path d={`M${-w} 22 Q${-w / 2} 46 0 22 Q${w / 2} 46 ${w} 22`} fill="none" stroke={cloth2} strokeWidth={4} opacity={0.6} />
       {/* items */}
-      <g transform={`translate(${-w * 0.55} -26) scale(${0.7 * step(0)})`}>
+      <g transform={`translate(${-w * 0.6} -22) scale(${0.56 * step(0)})`}>
         <Teapot x={0} y={0} scale={1} steam={steam} />
       </g>
       <g transform={`translate(${-w * 0.15} -22) scale(${0.7 * step(1)})`}>

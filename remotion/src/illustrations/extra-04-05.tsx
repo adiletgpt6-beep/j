@@ -342,7 +342,7 @@ export const Bubble: React.FC<{ x: number; y: number; text: string; scale?: numb
 /* ------------------------------------------------------------------ */
 
 /** Necklace of 8 slots along a shallow arc (video 04). `filled` = how many are filled, `appear` = frame each new slot lights up. */
-export const Necklace: React.FC<{ filled: number; appearAt?: number[]; y?: number; highlight?: number[]; opacity?: number; compact?: boolean }> = ({ filled, appearAt = [], y = 1165, highlight = [], opacity = 1 }) => {
+export const Necklace: React.FC<{ filled: number; appearAt?: number[]; y?: number; highlight?: number[]; opacity?: number; compact?: boolean }> = ({ filled, appearAt = [], y = 1165, highlight = [] as number[], opacity = 1 }) => {
   const frame = useCurrentFrame();
   const n = 8;
   const pts = Array.from({ length: n }).map((_, i) => {
