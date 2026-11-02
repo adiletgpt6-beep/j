@@ -1,0 +1,12 @@
+{
+  "_comment": "Voice IDs from the ElevenLabs account configured in the environment (ELEVENLABS_API_KEY). No secrets here. Change IDs to swap voices.",
+  "model_id": "eleven_v3",
+  "output_format": "mp3_44100_128",
+  "voices": {
+    "narrator-ky": { "voice_id": "4YbRyZQGzRMFNw4Pz5QN", "name": "BalaGo KG narrator (ul2d)", "language_code": "ky", "description": "Warm, confident Kyrgyz woman narrator (account voice)" },
+    "narrator-ru": { "voice_id": "XVcmL7hz5xYLHLu3OJhR", "name": "Lesson-teacher-Muhammad", "language_code": "ru", "description": "Calm warm Russian-speaking man, kind teacher (account voice)" }
+  },
+  "voice_settings": { "stability": 0.5, "similarity_boost": 0.8, "style": 0.0, "use_speaker_boost": true },
+  "timing": { "fps": 30, "lead_in_s": 0.45, "tail_s": 0.75, "first_lead_in_s": 0.9, "last_tail_s": 1.6 },
+  "subtitles": { "max_chars": 50, "soft_break_chars": 26, "gap_break_s": 0.6 }
+}
