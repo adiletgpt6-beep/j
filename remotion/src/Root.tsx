@@ -4,6 +4,7 @@ import { VideoShell } from "./components/VideoShell";
 import { videos } from "./videos";
 import { FPS, H, W } from "./theme";
 import type { VideoData } from "./types";
+import { AliCompositions } from "./ali/compositions";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -26,5 +27,6 @@ export const RemotionRoot: React.FC = () => (
           );
         })
     )}
+    <AliCompositions />
   </>
 );

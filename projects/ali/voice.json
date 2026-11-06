@@ -1,0 +1,12 @@
+{
+  "_comment": "Voice settings for the Ali video. voice_id must be a MALE Kyrgyz-capable voice from the ElevenLabs account (ELEVENLABS_API_KEY). Candidates to audition (gender not labelled in the account): BalaGo KG teacher EBOfpUWl9G5ltD2PkFgy, BalaGo KG husband NVEGeFqcDqc5o29VoAQm, BalaGo KG boss yCcjraKUNFsfIv02eS9D, BalaGo NB2 father xxKkhYUgtZTPTuHpktPy. Not yet auditioned: paid generation waits for client consent.",
+  "voice_id": "EBOfpUWl9G5ltD2PkFgy",
+  "voice_name": "BalaGo KG teacher (candidate, not auditioned)",
+  "model_id": "eleven_v3",
+  "language_code": "ky",
+  "output_format": "mp3_44100_128",
+  "voice_settings": { "stability": 0.5, "similarity_boost": 0.8, "style": 0.15, "use_speaker_boost": true },
+  "timing": { "fps": 30, "lead_in_s": 0.4, "tail_s": 0.55, "first_lead_in_s": 0.8, "last_tail_s": 2.4, "chunk_gap_s": 0.85 },
+  "placeholder": { "chars_per_s": 13.5, "pause": { ",": 0.22, "—": 0.3, ":": 0.3, ".": 0.45, "?": 0.5, "!": 0.45 } },
+  "subtitles": { "max_chars": 42, "soft_break_chars": 24, "gap_break_s": 0.55 }
+}
