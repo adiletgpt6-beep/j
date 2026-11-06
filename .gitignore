@@ -9,3 +9,4 @@ __pycache__/
 *.log
 /tmp/
 !projects/ali/renders/*.mp4
+build/align/ali/*.wav

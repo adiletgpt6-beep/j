@@ -76,6 +76,9 @@ def make_cues(words):
             if brk: cues.append(cur); cur = []
         cur.append(w)
     if cur: cues.append(cur)
+    for i in range(len(cues) - 1):  # never leave a number at a line end ("13 | жаштардагы")
+        if len(cues[i]) > 1 and re.fullmatch(r"[\d–-]+", cues[i][-1]["w"]):
+            cues[i + 1].insert(0, cues[i].pop())
     merged = []
     for c in cues:  # glue short tails like '— дейт.' / '— деп жооп берет.' to the quote
         orphan = len(c) == 1 and len(c[0]["w"]) <= 10 and c[0]["s"] - merged[-1][-1]["e"] < 0.4 if merged else False
@@ -91,6 +94,9 @@ def make_cues(words):
     return out
 
 
+LOUD = "loudnorm=I=-15:TP=-1.5:LRA=11,aresample=44100"  # narration level (reference video sits at -14 LUFS)
+
+
 def voice_scene(sc):
     chunks = [c.strip() for c in sc["text"].split("||")]
     words, parts, t = [], [], 0.0
@@ -98,18 +104,21 @@ def voice_scene(sc):
         key = hashlib.sha1(f"{chunk}|{CFG['voice_id']}|{CFG['model_id']}|{json.dumps(CFG['voice_settings'], sort_keys=True)}".encode()).hexdigest()
         mp3 = ALIGN / f"{sc['id']}-{k}.mp3"; aj = ALIGN / f"{sc['id']}-{k}.json"
         data = base.api_tts(chunk, VOICE, mp3, aj, key)
+        tempo = CFG.get("tempo", 1.0)
+        slow = ALIGN / f"{sc['id']}-{k}.t{tempo}.wav"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp3), "-af", f"atempo={tempo}", "-ar", "44100", str(slow)], check=True)
         for w in base.words_from_alignment(data["alignment"]):
-            words.append({"w": w["w"], "s": w["s"] + t, "e": w["e"] + t})
-        parts.append(mp3); t += base.audio_duration(mp3) + (CFG["timing"]["chunk_gap_s"] if k < len(chunks) - 1 else 0)
+            words.append({"w": w["w"], "s": w["s"] / tempo + t, "e": w["e"] / tempo + t})
+        parts.append(slow); t += base.audio_duration(slow) + (CFG["timing"]["chunk_gap_s"] if k < len(chunks) - 1 else 0)
     out = PUB / "audio" / f"{sc['id']}.mp3"; out.parent.mkdir(parents=True, exist_ok=True)
     if len(parts) == 1:
-        out.write_bytes(parts[0].read_bytes())
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(parts[0]), "-af", LOUD, "-ar", "44100", "-b:a", "160k", str(out)], check=True)
     else:
         gap = CFG["timing"]["chunk_gap_s"]; inputs, filt = [], ""
         for i, p in enumerate(parts): inputs += ["-i", str(p)]
         filt = "".join(f"[{i}:a]aresample=44100,apad=pad_dur={gap if i < len(parts)-1 else 0}[a{i}];" for i in range(len(parts)))
-        filt += "".join(f"[a{i}]" for i in range(len(parts))) + f"concat=n={len(parts)}:v=0:a=1[o]"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", filt, "-map", "[o]", "-b:a", "128k", str(out)], check=True)
+        filt += "".join(f"[a{i}]" for i in range(len(parts))) + f"concat=n={len(parts)}:v=0:a=1,{LOUD}[o]"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", filt, "-map", "[o]", "-b:a", "160k", str(out)], check=True)
     return words, base.audio_duration(out), f"ali/audio/{sc['id']}.mp3"
 
 
